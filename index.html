@@ -228,12 +228,6 @@
             max-width: 650px;
         }
 
-        @media (max-width: 550px) {
-            .matrix-nine-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
         .matrix-node {
             background: #090c12;
             border: 1px solid #161f30;
@@ -392,38 +386,40 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue-dark); }
 
         /* ========================================================= */
-        /* 手機版排版與滾動修正 (MOBILE SCROLL FIX)                     */
+        /* 手機版排版與滾動終極修復 (MOBILE SCROLL FIX V2)               */
         /* ========================================================= */
         @media (max-width: 1199px) {
-            body {
-                overflow-y: auto !important; /* 解除手機版網頁鎖死 */
-                height: auto;
+            html, body {
+                height: auto !important;
+                min-height: 100% !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                display: block !important; /* 移除 flex 避免高度計算異常 */
                 -webkit-overflow-scrolling: touch;
             }
             .hud-layout {
-                flex-direction: column;
-                overflow-y: visible !important;
+                display: block !important; /* 改用標準區塊排列 */
+                height: auto !important;
+                overflow: visible !important;
                 padding: 10px;
-                height: auto;
             }
             .hud-panel {
                 width: 100% !important;
-                flex: none !important;
+                display: block !important;
                 height: auto !important;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
             }
-            /* 讓面板內容自動長高，解除內部滾動條，讓使用者直接滑動整個網頁 */
             .stats-scroller, .matrix-scroller, .editor-container {
-                overflow-y: visible !important;
+                display: block !important;
                 height: auto !important;
                 max-height: none !important;
+                overflow: visible !important;
                 padding-bottom: 20px;
             }
-            .panel-left, .panel-center, .panel-right {
-                width: 100% !important;
-            }
             .matrix-nine-grid {
+                display: grid !important;
                 max-width: 100%;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -468,7 +464,7 @@
     <section class="hud-panel panel-center">
         <div class="panel-header">
             <span>裝備插槽矩陣</span>
-            <button class="btn-terminal btn-danger" style="padding: 6px 12px; font-size:0.8rem;" onclick="purgeCurrentCharConfig()">重置此角色裝備</button>
+            <button class="btn-terminal btn-danger" style="padding: 6px 12px; font-size:0.8rem;" onclick="purgeCurrentCharConfig()">重置裝備</button>
         </div>
         
         <div class="matrix-scroller">
@@ -479,14 +475,13 @@
 
     <aside class="hud-panel panel-right">
         <div class="panel-header" id="editorPanelTitle">改裝系統</div>
-        <div class="editor-container" id="editorPanelContent">
+        <div class="editor-container" id="editorPanelContent" style="scroll-margin-top: 20px;">
             <div class="editor-placeholder">請選取中央的矩陣方格<br>解鎖 1-5 欄詞墜加成配置</div>
         </div>
     </aside>
 </div>
 
 <script>
-    // Register PWA Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js').then(reg => {
@@ -644,10 +639,10 @@
         renderMatrix();
         renderEditor();
         
-        // 手機版：點擊方塊後，自動將畫面往下捲動至改裝面板
+        // Mobile auto-scroll logic
         if (window.innerWidth <= 1199) {
             setTimeout(() => {
-                document.getElementById('editorPanelTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('editorPanelContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         }
     }
