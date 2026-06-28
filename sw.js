@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ctm-tactical-v1';
+const CACHE_NAME = 'ctm-tactical-v2';
 const urlsToCache = [
   './',
   './index.html',

@@ -43,7 +43,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: hidden; /* Desktop default: lock scrolling */
         }
 
         header {
@@ -84,14 +84,6 @@
             margin: 0 auto;
         }
 
-        @media (max-width: 1199px) {
-            .hud-layout {
-                flex-direction: column;
-                overflow-y: auto;
-                padding: 10px;
-            }
-        }
-
         .hud-panel {
             background: var(--panel-bg-alpha);
             border: 1px solid var(--border-color);
@@ -130,7 +122,6 @@
             width: 340px;
             flex-shrink: 0;
         }
-        @media (max-width: 1199px) { .panel-left { width: 100%; } }
 
         .char-manager {
             padding: 18px;
@@ -301,7 +292,6 @@
             width: 380px;
             flex-shrink: 0;
         }
-        @media (max-width: 1199px) { .panel-right { width: 100%; } }
 
         .editor-container {
             padding: 20px;
@@ -400,6 +390,42 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #1f2c3f; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue-dark); }
+
+        /* ========================================================= */
+        /* 手機版排版與滾動修正 (MOBILE SCROLL FIX)                     */
+        /* ========================================================= */
+        @media (max-width: 1199px) {
+            body {
+                overflow-y: auto !important; /* 解除手機版網頁鎖死 */
+                height: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .hud-layout {
+                flex-direction: column;
+                overflow-y: visible !important;
+                padding: 10px;
+                height: auto;
+            }
+            .hud-panel {
+                width: 100% !important;
+                flex: none !important;
+                height: auto !important;
+                margin-bottom: 10px;
+            }
+            /* 讓面板內容自動長高，解除內部滾動條，讓使用者直接滑動整個網頁 */
+            .stats-scroller, .matrix-scroller, .editor-container {
+                overflow-y: visible !important;
+                height: auto !important;
+                max-height: none !important;
+                padding-bottom: 20px;
+            }
+            .panel-left, .panel-center, .panel-right {
+                width: 100% !important;
+            }
+            .matrix-nine-grid {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -617,6 +643,13 @@
         activeSlotIndex = idx;
         renderMatrix();
         renderEditor();
+        
+        // 手機版：點擊方塊後，自動將畫面往下捲動至改裝面板
+        if (window.innerWidth <= 1199) {
+            setTimeout(() => {
+                document.getElementById('editorPanelTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
     }
 
     function renderEditor() {
