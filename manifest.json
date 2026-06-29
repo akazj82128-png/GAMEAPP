@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#050608",
   "theme_color": "#050608",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDBmMmZlIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwYTBhIi8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNDAiLz48L3N2Zz4=",
